@@ -8,7 +8,7 @@ The Huffman Compression algorithm is the driving force of the byte_compress func
 ## huffman_tree.cpp
 To encapsulate the capabilities of the Huffman Tree, I created a custom class Huffman_Tree, which has the following API:
 
-### Huffman_Tree(unsigned char data_ptr[], int data_size)
+### ```Huffman_Tree(unsigned char data_ptr[], int data_size)```
 This is the constructor method, and is used to build the Huffman Tree that will be used for encoding and decoding. To build the Huffman tree in we first start by determining the frequency of each byte in the array. This is used
 to order the nodes of the tree to be constructed, from lowest frequency to highest frequency in a priority queue. It should be noted that each item in the priority queue is a pointer to a custom Node struct which holds its children (Node*), cumulative frequency (int), and byte value (unsigned char) it represents if it is a leaf node. A node is constructed for each entry in the frequency table and an extra node is added with a value of 0xFF that serves as the EOF sentinel. We then iterate through the priority queue while its length is still greater than 1. In each iteration, we pop the two smallest frequency nodes and combine them into a new Node whose cumulative frequency is equal to the sum of the frequencies of the nodes we popped and set the smaller of the two to be the left child of the new Node and the larger of the two to be the right child of the new Node. This new Node is then inserted into the priority queue, and a new iteration begins. When the priority queue has reached a size of 1, the remaining Node* is the root of the Huffman tree, which will be popped and stored as private member ```m_root```.  
 
