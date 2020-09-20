@@ -36,7 +36,7 @@ the first new_size number of bytes modified and holding the contents of the comp
 ### Assumptions:
 1. It was assumed that the data_size to compress was the same size as the array pointed to by data_ptr
 
-### Know deficiencies:
+### Known deficiencies:
 1. It is known that the true size of the data_buffer does not change, due to the fact that C++ does not allow for the resizing of arrays.
 Since it was requested that the data within the data buffer be modified, this goal was attained and if the old data_ptr is not in use any longer
 it is suggested that the first new_size elements of data_ptr be copied to another byte array and data_ptr be discarded. 
