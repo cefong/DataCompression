@@ -12,16 +12,16 @@ To encapsulate the capabilities of the Huffman Tree, I created a custom class Hu
 This is the constructor method, and is used to build the Huffman Tree that will be used for encoding and decoding. To build the Huffman tree in we first start by determining the frequency of each byte in the array. This is used
 to order the nodes of the tree to be constructed, from lowest frequency to highest frequency in a priority queue. It should be noted that each item in the priority queue is a pointer to a custom Node struct which holds its children (Node*), cumulative frequency (int), and byte value (unsigned char) it represents if it is a leaf node. A node is constructed for each entry in the frequency table and an extra node is added with a value of 0xFF that serves as the EOF sentinel. We then iterate through the priority queue while its length is still greater than 1. In each iteration, we pop the two smallest frequency nodes and combine them into a new Node whose cumulative frequency is equal to the sum of the frequencies of the nodes we popped and set the smaller of the two to be the left child of the new Node and the larger of the two to be the right child of the new Node. This new Node is then inserted into the priority queue, and a new iteration begins. When the priority queue has reached a size of 1, the remaining Node* is the root of the Huffman tree, which will be popped and stored as private member ```m_root```.  
 
-### ~Huffman_Tree()
+### ```~Huffman_Tree()```
 This is the class destructor, which calls the private method ```destroy(Node *root)``` which recursively destroys each ```Node *``` in the tree, so memory can be freed once the byte array has been encoded and decoded successfully.
 
-### Node *get_root()
+### ```Node *get_root()```
 This is the getter method to get the root of the tree. Since there is no public setter method for ```m_root``` this means that it is a read-only member, which is good since we don't want to point the root of the tree to an arbitrary location!
 
-### void generate_code()
+### ```void generate_code()```
 This class method is called once the Huffman tree has been constructed, as each unique byte to be represented must be encoded using the tree. ```generate_code()``` is actually a front for the private class method ```generate_code(Node *root, Huffman_Bitcode code)`` which recursively determines the Huffman representation for each unique byte that will be represented. Starting at the root, it traverses down the tree, concatening a '1' to the code representation of a byte for each right turn, and a '0' for each left turn (the complexities of this bit concatenation are abstracted by the Huffman_Bitcode class, which will be described later) When it reaches a leaf node, it maps the byte in that leaf node to the final code representation or "bytecode" it determined, based on the order of left and right turns it made to get there, and notes the size of the bytecode.
 
-### int encode(unsigned char data_ptr[], int data_size)
+### ```int encode(unsigned char data_ptr[], int data_size)```
 To finally compress the data buffer given, I had to make a couple modifications to the classic Huffman encoding algorithm. Since the 
 data buffer was to be modified in place, and the encoding for each byte was usually not a full byte itself, I set up a buffer to keep track of the length of the encoding, and only replaced the contents of data_ptr at the desired position when the buffer had reached 8 bits. Therefore, the memory used by this algorithm does not depend on the size of the data buffer that is given.
 
@@ -30,7 +30,7 @@ the first ```new_size``` number of bytes modified and holding the contents of th
 
 The contents of ```data_ptr``` were also copied over to a new dynamic array, which is pointed to by the private member ```m_compressed_array```. 
 
-### unsigned char *get_compressed_array()
+### ```unsigned char *get_compressed_array()```
 This getter method gets the private ```m_compressed_array``` member, which points to the resized compressed array. 
 
 ### Assumptions:
