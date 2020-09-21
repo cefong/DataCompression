@@ -1,9 +1,8 @@
 # Data Compression Algorithm
-## Developed by: @cefong
 
 This data compression algorithm was developed using Huffman coding, which is a lossless compression algorithm that relies on prefix codes, greedy algorithms, and bottom up construction.
 
-The Huffman Compression algorithm is the driving force of the byte_compress function (in compression.cpp), which takes an data buffer (unsigned char array[]) and the size of the buffer (int) as its arguments.
+The Huffman Compression algorithm is the driving force of the ```byte_compress``` function (in compression.cpp), which takes an data buffer (```unsigned char array[]```) and the size of the buffer (```int```) as its arguments.
 
 ## Huffman_Tree
 To encapsulate the capabilities of the Huffman Tree, I created a custom class Huffman_Tree (in huffman_tree.cpp), which has the following API:
@@ -43,7 +42,7 @@ This is the constructor method to create an instance of Huffman_Bitcode. It init
 These class methods concatenate a 0 bit and a 1 bit to the end of ```m_bytecode``` respectively. A new Huffman_Bitcode instance with this new bytecode is created and returned.
 
 ### ```unsigned get_bytecode()``` and ```unsigned get_size()```
-These are the getter functions for the ```m_bytecode``` and ```m_size``` members respectively. 
+These are the getter methods for the ```m_bytecode``` and ```m_size``` members respectively. 
 
 ## Extras
 To keep track of the byte encoding that is used with the given ```data_ptr[]```, I created the ```print_code()``` class method of the Huffman_Tree, which will print the byte and its given bytecode and size of bytecode when called. 
@@ -68,10 +67,11 @@ Now, to execute the program:
 
 ```./compression.exe```
 
-### Assumptions:
+## Assumptions:
 1. It was assumed that the ```data_size``` to compress was the same size as the array pointed to by ```data_ptr```
 2. It is assumed the the size of the bytes given are 8 bits
 
-### Known deficiencies:
+## Known deficiencies:
 1. It is known that the true size of the data_buffer does not change, due to the fact that C++ does not allow for the resizing of arrays. Since it was requested that the data within the byte array be modified, this goal was attained and if the old ```data_ptr``` is not in use any longer it is suggest that the data ptr be deleted and the Huffman_Tree get_compressed_array method is used to get the resized compressed array.
 2. It is known that the class methods closely rely on each other and must be called in a specific order (i.e. the ```get_compressed_array()``` method should not be called until an array has been compressed). It is suggested that the ```byte_compress``` function be used to abstract the complexities of the Huffman compression algorithm, as it uses these methods in the order they are intended to be used.
+3. The bytes in data_ptr are overriden as data_ptr is being iterated over. This is not a concern for the given design problem since the bytecodes will be less than a byte. This is because the most amount of unique bytes we can have is 128, since it is guaranteed the values of the bytes will only range from 0 to 127. This means we will only ever need 2^7 + 1 (for EOF) different representations, or 7 bits to represent these bytes. 

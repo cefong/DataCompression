@@ -1,11 +1,21 @@
 #include "huffman_tree.h"
 #include "huffman_bitcode.h"
 
-#include <iostream>
+#include <iostream> // to get std::cout
 #include <bitset> // to get std::bitset
 
 using namespace std;
 
+/*
+    This function compresses a data buffer of a given size using the Huffman compression algorithm
+
+    Parameters
+    unsigned char data_ptr[]: a pointer to the data buffer
+    int data_size: the number of bytes to compress
+
+    Returns
+    int new_size: the number of bytes in the compressed buffer
+*/
 int byte_compress(unsigned char data_ptr[], int data_size) {
     // create Huffman tree
     Huffman_Tree tree = Huffman_Tree(data_ptr, data_size);
@@ -14,7 +24,6 @@ int byte_compress(unsigned char data_ptr[], int data_size) {
     // encode each byte and modify the existing array
     tree.generate_code();
     int new_size = tree.encode(data_ptr, data_size);
-    data_ptr = tree.get_compressed_array();
     return new_size;
 }
 
@@ -31,7 +40,6 @@ int main()
     }
     cout << endl;
     cout << "Number of bytes before compression: " << data_size << endl;
-    cout << "Encoding used: " << endl;
     int num = byte_compress(data_ptr, data_size);
     for (int i = 0; i < num; i++) {
         bitset <8> x(data_ptr[i]);

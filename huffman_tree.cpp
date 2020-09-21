@@ -1,22 +1,30 @@
 #include "huffman_tree.h"
 #include "huffman_bitcode.h"
 
-#include <queue>
-#include <vector>
-#include <iostream>
-#include <bitset>
-#include <cstring>
+#include <queue> // for std::priority_queue
+#include <iostream> // for std::cout
+#include <bitset> // for std::bitset
+#include <cstring> // for std::memcpy
 
 using namespace std;
 
-// custom Node function comparison
+// custom Node function comparison for ordering in priority_queue
 struct CompareFreq {
     bool operator()(Node *a, Node *b) {
         return (a -> freq) > (b -> freq);
     }
 };
 
-// Huffman Tree constructor
+/*
+    Huffman_Tree constructor
+
+    Parameters
+    unsigned char data_ptr[]: a pointer to the data buffer
+    int data_size: the number of bytes to compare
+
+    Returns 
+    none
+*/
 Huffman_Tree::Huffman_Tree(unsigned char data_ptr[], int data_size) {
     // get frequency of each character and store in unordered map
     unordered_map<unsigned char, int> freq;
@@ -68,10 +76,12 @@ Huffman_Tree::Huffman_Tree(unsigned char data_ptr[], int data_size) {
     m_root = root;
 }
 
+// destructor
 Huffman_Tree::~Huffman_Tree() {
     destroy(m_root);
 }
 
+// recursive destructor helper
 void Huffman_Tree::destroy(Node *root) {
     if (root != nullptr) {
         destroy(root -> left);
@@ -80,19 +90,25 @@ void Huffman_Tree::destroy(Node *root) {
     }
 }
 
-unsigned char *Huffman_Tree::get_compressed_array() {
-    return m_compressed_array;
-}
-
+// getter methods to get root to Huffman tree
 Node *Huffman_Tree::get_root() {
     return m_root;
 }
 
+// front facing class method to generate the byte to bytecode mappings for this Huffman tree
 void Huffman_Tree::generate_code() {
     Huffman_Bitcode code = Huffman_Bitcode(0, 0);
     generate_code(m_root, code);
 }
 
+/*
+    Recursive function that generates the byte to bytecode mappings
+
+    Parameters
+    Node *root: the current node that is being examined
+    Huffman_Bitcode code: the bytecode that is being generated
+
+*/
 void Huffman_Tree::generate_code(Node *root, Huffman_Bitcode code) {
     if (root == nullptr) return;
 
@@ -109,25 +125,41 @@ void Huffman_Tree::generate_code(Node *root, Huffman_Bitcode code) {
     generate_code(root->right, code.right_turn());
 }
 
+/*
+    Compresses a data buffer using the Huffman tree that was constructed
+
+    Parameters
+    unsigned char data_ptr[]: the pointer to the byte array to be compressed
+    int data_size: the number of bytes to be compressed
+
+    Returns
+    int new_size: the size of the modified data buffer
+*/
 int Huffman_Tree::encode(unsigned char data_ptr[], int data_size) {
+    // set the starting values of buffer, new_size, and offset
     unsigned char buff = 0x00;
     unsigned int new_size = 0;
     int offset = 7; // since there the 8 bits in a byte are "indexed" up till 7
     for (int i = 0; i <= data_size; i++) {
         // if i is = data_size, encode the EOF character (0xFF)
         unsigned char uncompressed = (i != data_size) ? data_ptr[i] : 0xFF;
+        // get the bytecode and size from the byte to bytecode mapping
         pair<unsigned int, unsigned int> bytecode_pair = huff_code[uncompressed];
         unsigned int bytecode = bytecode_pair.first;
         unsigned int size = bytecode_pair.second;
+        // calculate how much the bytecode needs to be shifted to fit into the buffer
         int shift = offset - (size - 1); // where the code needs to be shifted to fit into the byte
         offset -= size; // the new offset
+        // since a negative shift value will cause an undefined outcome, change the direction of shift if it is negative
         unsigned char appended = (shift > 0) ? (bytecode << shift) : (bytecode >> -shift);
         buff += appended;
 
         if (offset <  0) {
             data_ptr[new_size++] = buff;
             buff = 0x00;
+            // the size of the leftover bits from the last bytecode
             size = -offset - 1;
+            // reset the offset
             offset = 7;
             buff += bytecode << (offset - (size - 1));
             offset -= size; // new offset
@@ -143,7 +175,14 @@ int Huffman_Tree::encode(unsigned char data_ptr[], int data_size) {
     return new_size;
 }
 
+// getter method to get the resized, compressed dynamic array
+unsigned char *Huffman_Tree::get_compressed_array() {
+    return m_compressed_array;
+}
+
+// prints byte to bytecode mapping being used
 void Huffman_Tree::print_code() {
+    cout << "Encoding used: " << endl;
     for (auto mapping: huff_code) {
         bitset<8> byte(mapping.first);
         unsigned int bytecode = (mapping.second).first;
