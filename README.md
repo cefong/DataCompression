@@ -33,7 +33,7 @@ The contents of ```data_ptr``` were also copied over to a new dynamic array, whi
 This getter method gets the private ```m_compressed_array``` member, which points to the resized compressed array. 
 
 ## Huffman_Bitcode
-To concatenate bits together I created a custom class called Huffman_Bitcode, which is in huffman_bitcode.cpp. The purpose of this class was to abstract away the need to do logical bit operations when encoding left or right turns in the ```generate_code`` Huffman_Tree class method. The API for the class is as follows:
+To concatenate bits together I created a custom class called Huffman_Bitcode, which is in huffman_bitcode.cpp. The purpose of this class was to abstract away the need to do logical bit operations when encoding left or right turns in the ```generate_code``` Huffman_Tree class method. The API for the class is as follows:
 
 ### ```Huffman_Bitcode(unsigned bytecode, unsigned size)```
 This is the constructor method to create an instance of Huffman_Bitcode. It initializes the private members ```m_bytecode``` and ```m_size``` to the specified bytecode and size. 
