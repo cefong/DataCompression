@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <bitset>
+#include <cstring>
 
 using namespace std;
 
@@ -90,13 +91,6 @@ Node *Huffman_Tree::get_root() {
 void Huffman_Tree::generate_code() {
     Huffman_Bitcode code = Huffman_Bitcode(0, 0);
     generate_code(m_root, code);
-    for (auto mapping: huff_code) {
-        bitset<8> byte(mapping.first);
-        unsigned int bytecode = (mapping.second).first;
-        bitset<8> x(bytecode);
-        unsigned int size = (mapping.second).second;
-        cout << "byte: " << byte << " code: " << x << " size: " << size << endl;
-    };
 }
 
 void Huffman_Tree::generate_code(Node *root, Huffman_Bitcode code) {
@@ -147,4 +141,14 @@ int Huffman_Tree::encode(unsigned char data_ptr[], int data_size) {
     m_compressed_array = new_arr; // point compressed array member to newly created array
     delete[] new_arr; // release memory
     return new_size;
+}
+
+void Huffman_Tree::print_code() {
+    for (auto mapping: huff_code) {
+        bitset<8> byte(mapping.first);
+        unsigned int bytecode = (mapping.second).first;
+        bitset<8> x(bytecode);
+        unsigned int size = (mapping.second).second;
+        cout << "byte: " << byte << " code: " << x << " size: " << size << endl;
+    }
 }

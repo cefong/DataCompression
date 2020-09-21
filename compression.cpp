@@ -14,6 +14,7 @@ int byte_compress(unsigned char data_ptr[], int data_size) {
     // encode each byte and modify the existing array
     tree.generate_code();
     int new_size = tree.encode(data_ptr, data_size);
+    data_ptr = tree.get_compressed_array();
     return new_size;
 }
 

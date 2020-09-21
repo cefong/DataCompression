@@ -32,6 +32,7 @@ class Huffman_Tree
         void generate_code(); // generates the byte to bytecode (sets off recursive generate_code)
         int encode(unsigned char data_ptr[], int data_size); // compresses the bytes in data_ptr[]
         unsigned char *get_compressed_array(); // getter method to get compressed array
+        void print_code(); // prints the byte encoding that was used
 };
 
 #endif
