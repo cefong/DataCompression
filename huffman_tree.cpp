@@ -5,6 +5,7 @@
 #include <iostream> // for std::cout
 #include <bitset> // for std::bitset
 #include <cstring> // for std::memcpy
+#include <vector> // for std::vector
 
 using namespace std;
 

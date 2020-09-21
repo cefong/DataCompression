@@ -3,16 +3,16 @@
 
 #include "huffman_bitcode.h"
 
-#include <string> // to get string
-#include <unordered_map> // to get unordered_map
+#include <unordered_map> // to get std::unordered_map
+#include <vector> // to get std::vector
 
 using namespace std;
 
 // Node declaration
 struct Node 
 {
-    Node *left;
-    Node *right;
+    Node *left = nullptr;
+    Node *right = nullptr;
     int freq;
     unsigned char byte;
 };
