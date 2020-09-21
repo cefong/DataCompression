@@ -60,10 +60,12 @@ This guide assumes that the gcc compiler is installed, and this repository has b
 
 
 To compile the program from the command line run the following in your working directory:
+
 ```g++ -g compression.cpp huffman_tree.cpp huffman_bitcode.cpp -o compression.exe```
 
 
 Now, to execute the program:
+
 ```./compression.exe```
 
 ### Assumptions:
