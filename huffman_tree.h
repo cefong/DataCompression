@@ -4,7 +4,6 @@
 #include "huffman_bitcode.h"
 
 #include <unordered_map> // to get std::unordered_map
-#include <vector> // to get std::vector
 
 using namespace std;
 
